@@ -140,9 +140,9 @@ export default function PersonalizedLearning() {
         // Set courses from recommended courses or use fallback
         if (coursesData && coursesData.length > 0) {
           // Map the Course type from dynamicDataStore to our local Course interface
-          type RawCourse = Omit<Course, 'aiMatch' | 'enrollments' | 'completionRate'>;
-          const mappedCourses: Course[] = (coursesData as RawCourse[]).map((course) => ({
+          const mappedCourses: Course[] = (coursesData as any[]).map((course) => ({
             ...course,
+            duration: String(course.duration),
             aiMatch: Math.floor(Math.random() * 20) + 80,
             enrollments: Math.floor(Math.random() * 1000) + 500,
             completionRate: Math.floor(Math.random() * 30) + 70
