@@ -1,15 +1,22 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { TrendingUp, Users, Award, Clock, Target, Zap, BookOpen, Palette, Brain, Activity, Star } from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
+import { TrendingUp, Award, Clock, Target, Zap, BookOpen, Brain, Activity, Star } from 'lucide-react';
+import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
 import { useState, useEffect } from 'react';
 import { dynamicDataStore, DashboardMetrics, AIInsights } from '../lib/dynamicDataStore';
-import { advancedMistralService } from '../lib/advancedMistralService';
+
+interface RealTimeData {
+  practiceMinutes?: number;
+  coursesCompleted?: number;
+  activeUsers?: number;
+  communityInteractions?: number;
+  trendingTopics?: string[];
+}
 
 export default function Dashboard() {
   const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
-  const [realTimeData, setRealTimeData] = useState<any>(null);
+  const [realTimeData, setRealTimeData] = useState<RealTimeData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [aiInsights, setAiInsights] = useState<AIInsights | null>(null);
 
@@ -375,7 +382,7 @@ export default function Dashboard() {
               <p className="text-sm text-gray-600 dark:text-gray-400">Courses Today</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl font-bold text-purple-600">{Math.floor(realTimeData.practiceMinutes / 60)}h</p>
+              <p className="text-2xl font-bold text-purple-600">{Math.floor((realTimeData.practiceMinutes ?? 0) / 60)}h</p>
               <p className="text-sm text-gray-600 dark:text-gray-400">Practice Time</p>
             </div>
             <div className="text-center">

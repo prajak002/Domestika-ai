@@ -163,7 +163,7 @@ export async function POST(request: NextRequest) {
           success: true,
           usage: data.usage
         });
-      } catch (parseError) {
+      } catch {
         return NextResponse.json({
           imageAnalysis: {
             description: data.choices[0].message.content,
@@ -247,7 +247,7 @@ export async function POST(request: NextRequest) {
           success: true,
           usage: data.usage
         });
-      } catch (parseError) {
+      } catch {
         return NextResponse.json({
           learningJourney: {
             courses: ["Beginner's Guide", "Intermediate Techniques", "Advanced Mastery"],

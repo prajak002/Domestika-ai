@@ -33,8 +33,8 @@ export default function AICoCreation() {
       if (!res.ok) throw new Error(data.error || 'Unknown error');
       setMessages(prev => [...prev, { text: data.text || data.response, isAI: true }]);
       setInputValue('');
-    } catch (err: any) {
-      setFeedbackError(err.message || 'Failed to get feedback');
+    } catch (err: unknown) {
+      setFeedbackError(err instanceof Error ? err.message : 'Failed to get feedback');
     } finally {
       setIsGettingFeedback(false);
     }
