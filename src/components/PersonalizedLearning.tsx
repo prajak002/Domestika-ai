@@ -91,7 +91,7 @@ export default function PersonalizedLearning() {
         
         try {
           dashboardMetrics = await dynamicDataStore.getDashboardMetrics('user_1');
-          coursesData = await dynamicDataStore.getRecommendedCourses('user_1');
+          coursesData = await dynamicDataStore.getRecommendedCourses();
         } catch (apiError) {
           console.warn('API unavailable, using fallback data:', apiError);
           // Continue with fallback data below

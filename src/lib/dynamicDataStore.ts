@@ -297,10 +297,10 @@ class DynamicDataStore {
     const aiInsights: AIInsights = this.generateAIInsights(user, weeklyProgress, skillDistribution);
 
     return {
-      totalHours: user.stats.totalHours + this.calculateRecentHours(user.id),
+      totalHours: user.stats.totalHours + this.calculateRecentHours(),
       coursesCompleted: user.stats.coursesCompleted,
       communityRank: this.calculateDynamicRank(user),
-      achievements: user.achievements.length + this.getUnlockedAchievements(user.id),
+      achievements: user.achievements.length + this.getUnlockedAchievements(),
       weeklyProgress,
       skillDistribution,
       activityData,
@@ -328,21 +328,21 @@ class DynamicDataStore {
   }
 
   private calculateDynamicSkills(user: User): SkillDistribution[] {
-    return Object.entries(user.skills).map(([skill, baseLevel]) => {
+    return Object.entries(user.skills).map(([skillName, baseLevel]) => {
       // Simulate skill evolution based on recent practice
-      const recentPractice = this.getRecentPracticeHours(user.id, skill);
+      const recentPractice = this.getRecentPracticeHours(skillName);
       const growthMultiplier = 1 + (recentPractice / 10);
       const dynamicLevel = Math.min(100, baseLevel * growthMultiplier);
       
       // Calculate growth trend
-      const historicalData = this.getSkillHistory(user.id, skill);
+      const historicalData = this.getSkillHistory(skillName);
       const growth = this.calculateGrowthTrend(historicalData);
       
       return {
-        skill,
+        skill: skillName,
         percentage: Math.round(dynamicLevel),
         growth: Math.round(growth),
-        color: this.getSkillColor(skill)
+        color: this.getSkillColor(skillName)
       };
     });
   }
@@ -460,7 +460,7 @@ class DynamicDataStore {
     return colors[skill] || '#6B7280';
   }
 
-  async getRecommendedCourses(userId: string): Promise<Course[]> {
+  async getRecommendedCourses(): Promise<Course[]> {
     try {
       // Generate local course recommendations to avoid API issues
       const courseTemplates = [
@@ -667,7 +667,7 @@ class DynamicDataStore {
     return skillValues.reduce((sum, val) => sum + val, 0) / skillValues.length;
   }
 
-  private calculateRecentHours(userId: string): number {
+  private calculateRecentHours(): number {
     // Simulate recent learning hours based on current time
     const now = new Date();
     const hourOfDay = now.getHours();
@@ -688,13 +688,13 @@ class DynamicDataStore {
     return Math.max(1, Math.floor(baseRank - skillBonus - activityBonus));
   }
 
-  private getUnlockedAchievements(userId: string): number {
+  private getUnlockedAchievements(): number {
     // Simulate new achievements based on recent activity
     const recentActivity = this.getRecentActivityScore();
     return recentActivity > 5 ? Math.floor(Math.random() * 3) : 0;
   }
 
-  private getRecentPracticeHours(userId: string, skill: string): number {
+  private getRecentPracticeHours(skill: string): number {
     // Simulate recent practice hours for specific skill
     const now = new Date();
     const dayOfWeek = now.getDay();
@@ -707,8 +707,8 @@ class DynamicDataStore {
     return baseHours + popularityBonus + (dayOfWeek % 3);
   }
 
-  private getSkillHistory(userId: string, skill: string): number[] {
-    // Generate historical skill progression data
+  private getSkillHistory(skill: string): number[] {
+    // Generate historical skill progression data for this skill
     return Array.from({ length: 7 }, (_, i) => {
       const baseProgress = 60 + (i * 5);
       return baseProgress + Math.floor(Math.random() * 10);
