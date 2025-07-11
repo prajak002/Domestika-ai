@@ -140,19 +140,22 @@ export default function PersonalizedLearning() {
         // Set courses from recommended courses or use fallback
         if (coursesData && coursesData.length > 0) {
           // Map the Course type from dynamicDataStore to our local Course interface
-          const mappedCourses: Course[] = (coursesData as Record<string, unknown>[]).map((course) => ({
-            id: String(course.id ?? ''),
-            title: String(course.title ?? ''),
-            instructor: String(course.instructor ?? ''),
-            level: String(course.level ?? ''),
-            duration: String(course.duration ?? ''),
-            rating: Number(course.rating ?? 0),
-            price: String(course.price ?? ''),
-            skills: Array.isArray(course.skills) ? course.skills.map(String) : [],
-            aiMatch: Math.floor(Math.random() * 20) + 80,
-            enrollments: Math.floor(Math.random() * 1000) + 500,
-            completionRate: Math.floor(Math.random() * 30) + 70
-          }));
+          const mappedCourses: Course[] = (coursesData as unknown[]).map((course) => {
+            const c = course as Record<string, unknown>;
+            return {
+              id: String(c.id ?? ''),
+              title: String(c.title ?? ''),
+              instructor: String(c.instructor ?? ''),
+              level: String(c.level ?? ''),
+              duration: String(c.duration ?? ''),
+              rating: Number(c.rating ?? 0),
+              price: String(c.price ?? ''),
+              skills: Array.isArray(c.skills) ? c.skills.map(String) : [],
+              aiMatch: Math.floor(Math.random() * 20) + 80,
+              enrollments: Math.floor(Math.random() * 1000) + 500,
+              completionRate: Math.floor(Math.random() * 30) + 70
+            };
+          });
           setCourses(mappedCourses);
         } else {
           // Generate dynamic courses with fallback
@@ -948,7 +951,7 @@ export default function PersonalizedLearning() {
                     AI Insight: Your Creative Journey
                   </h4>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Based on your learning patterns, you're excelling in <strong>color theory</strong> and <strong>composition</strong>. 
+                    Based on your learning patterns, you&apos;re excelling in <strong>color theory</strong> and <strong>composition</strong>. 
                     Consider exploring <strong>advanced lighting techniques</strong> to enhance your digital art. 
                     The golden ratio $\phi = 1.618$ could elevate your compositions further.
                   </p>

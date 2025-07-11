@@ -9,8 +9,6 @@ export interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
   defaultValue?: string
 }
 
-export interface TabsListProps extends React.HTMLAttributes<HTMLDivElement> {}
-
 export interface TabsTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   value: string
 }
@@ -39,7 +37,7 @@ const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(
 )
 Tabs.displayName = "Tabs"
 
-const TabsList = React.forwardRef<HTMLDivElement, TabsListProps>(
+const TabsList = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
     <div
       ref={ref}

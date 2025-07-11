@@ -68,6 +68,12 @@ export interface ClassificationResult {
   }>;
 }
 
+// Define a type for the expected response structure
+interface MistralChatResponse {
+  choices: Array<{ message: { content: string } }>;
+  usage?: unknown;
+}
+
 class AdvancedMistralService {
   private config: MistralConfig;
   private conversations: Map<string, Conversation> = new Map();
@@ -138,12 +144,13 @@ Provide a comprehensive, well-formatted response that helps the learner grow the
         })
       });
 
-      const rawText = (response as any).choices[0]?.message?.content || '';
+      const chatResponse = response as MistralChatResponse;
+      const rawText = chatResponse.choices[0]?.message?.content || '';
       const formattedText = this.formatCreativeResponse(rawText);
 
       return {
         text: formattedText,
-        usage: (response as any).usage
+        usage: (response as unknown as { usage: unknown }).usage
       };
     } catch (error) {
       console.error('Chat completion failed:', error);
@@ -243,7 +250,7 @@ Try your question again when the connection improves! 🚀`,
         })
       });
 
-      return (response as any).result || {
+      return (response as unknown as { result: ClassificationResult }).result || {
         category: 'unknown',
         confidence: 0,
         subcategories: []
@@ -309,7 +316,7 @@ Try your question again when the connection improves! 🚀`,
         })
       });
 
-      return (response as any).result || {
+      return (response as unknown as { result: OCRResult }).result || {
         text: '',
         confidence: 0,
         boundingBoxes: []
@@ -354,7 +361,7 @@ Try your question again when the connection improves! 🚀`,
   async getConversations(): Promise<Conversation[]> {
     try {
       const response = await this.makeRequest('/conversations');
-      return (response as any).conversations || Array.from(this.conversations.values());
+      return (response as unknown as { conversations: Conversation[] }).conversations || Array.from(this.conversations.values());
     } catch (error) {
       console.error('Failed to get conversations:', error);
       return Array.from(this.conversations.values());
@@ -364,7 +371,7 @@ Try your question again when the connection improves! 🚀`,
   async getConversation(conversationId: string): Promise<Conversation | null> {
     try {
       const response = await this.makeRequest(`/conversations/${conversationId}`);
-      return (response as any).conversation || this.conversations.get(conversationId) || null;
+      return (response as unknown as { conversation: Conversation }).conversation || this.conversations.get(conversationId) || null;
     } catch (error) {
       console.error('Failed to get conversation:', error);
       return this.conversations.get(conversationId) || null;
@@ -374,7 +381,7 @@ Try your question again when the connection improves! 🚀`,
   async getConversationHistory(conversationId: string): Promise<ConversationMessage[]> {
     try {
       const response = await this.makeRequest(`/conversations/${conversationId}/history`);
-      return (response as any).messages || [];
+      return (response as unknown as { messages: ConversationMessage[] }).messages || [];
     } catch (error) {
       console.error('Failed to get conversation history:', error);
       return [];
@@ -418,7 +425,8 @@ Try your question again when the connection improves! 🚀`,
       });
 
       // Extract AI response
-      const aiContent = (response as any).choices?.[0]?.message?.content || 'I apologize, but I cannot provide a response at this time.';
+      const chatResponse = response as MistralChatResponse;
+      const aiContent = chatResponse.choices[0]?.message?.content || 'I apologize, but I cannot provide a response at this time.';
       
       const aiMessage: ConversationMessage = {
         id: (Date.now() + 1).toString(),
