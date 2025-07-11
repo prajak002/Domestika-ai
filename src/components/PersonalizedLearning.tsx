@@ -8,21 +8,18 @@ import {
   BookOpen,
   Target,
   TrendingUp,
-  MessageCircle,
   Send,
   Clock,
   Award,
   Star,
   Brain,
   Users,
-  ChevronRight,
   Sparkles,
   Palette,
   Camera,
   Zap,
   Trophy,
-  Heart,
-  Share2
+  Heart
 } from 'lucide-react';
 import {
   LineChart,
@@ -79,8 +76,8 @@ export default function PersonalizedLearning() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [isLoadingCourses, setIsLoadingCourses] = useState(true);
   const [counter, setCounter] = useState(1);
-  const [skillData, setSkillData] = useState<any[]>([]);
-  const [progressData, setProgressData] = useState<any[]>([]);
+  const [skillData, setSkillData] = useState<{ subject: string; A: number; fullMark: number }[]>([]);
+  const [progressData, setProgressData] = useState<{ week: string; progress: number; engagement: number }[]>([]);
   const [practices, setPractices] = useState<Practice[]>([]);
 
   useEffect(() => {
