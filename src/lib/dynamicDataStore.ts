@@ -335,7 +335,7 @@ class DynamicDataStore {
       const dynamicLevel = Math.min(100, baseLevel * growthMultiplier);
       
       // Calculate growth trend
-      const historicalData = this.getSkillHistory(skillName);
+      const historicalData = this.getSkillHistory();
       const growth = this.calculateGrowthTrend(historicalData);
       
       return {
@@ -707,7 +707,7 @@ class DynamicDataStore {
     return baseHours + popularityBonus + (dayOfWeek % 3);
   }
 
-  private getSkillHistory(skill: string): number[] {
+  private getSkillHistory(): number[] {
     // Generate historical skill progression data for this skill
     return Array.from({ length: 7 }, (_, i) => {
       const baseProgress = 60 + (i * 5);
