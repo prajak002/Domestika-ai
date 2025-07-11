@@ -1,8 +1,8 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { BarChart3, TrendingUp, Users, Zap, Eye, Heart, MessageSquare, Share2 } from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ComposedChart, Bar, Area, AreaChart, PieChart, Pie, Cell, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
+import { BarChart3, TrendingUp, Users, Zap, Eye, Heart, MessageSquare } from 'lucide-react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ComposedChart, Bar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
 
 const northStarData = [
   { month: 'Jan', actions: 120, learners: 1250, retention: 78 },
@@ -75,8 +75,6 @@ const aiInsights = [
     confidence: 96
   }
 ];
-
-const COLORS = ['#8B5CF6', '#3B82F6', '#10B981', '#F59E0B', '#EF4444'];
 
 export default function MetricsPanel() {
   return (

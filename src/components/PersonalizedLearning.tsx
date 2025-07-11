@@ -99,7 +99,7 @@ export default function PersonalizedLearning() {
         
         // Set skill data from dashboard metrics or fallback
         if (dashboardMetrics?.skillDistribution) {
-          const dynamicSkillData = dashboardMetrics.skillDistribution.map((skillDist: any) => ({
+          const dynamicSkillData = dashboardMetrics.skillDistribution.map((skillDist: { skill: string; percentage: number }) => ({
             subject: skillDist.skill,
             A: skillDist.percentage,
             fullMark: 100
@@ -119,7 +119,7 @@ export default function PersonalizedLearning() {
 
         // Set progress data from dashboard metrics or fallback
         if (dashboardMetrics?.weeklyProgress) {
-          const progressDataMapped = dashboardMetrics.weeklyProgress.map((week: any) => ({
+          const progressDataMapped = dashboardMetrics.weeklyProgress.map((week: { week: string; completed: number; engagement: number }) => ({
             week: week.week,
             progress: week.completed,
             engagement: week.engagement
@@ -140,7 +140,8 @@ export default function PersonalizedLearning() {
         // Set courses from recommended courses or use fallback
         if (coursesData && coursesData.length > 0) {
           // Map the Course type from dynamicDataStore to our local Course interface
-          const mappedCourses: Course[] = coursesData.map((course: any) => ({
+          type RawCourse = Omit<Course, 'aiMatch' | 'enrollments' | 'completionRate'>;
+          const mappedCourses: Course[] = (coursesData as RawCourse[]).map((course) => ({
             ...course,
             aiMatch: Math.floor(Math.random() * 20) + 80,
             enrollments: Math.floor(Math.random() * 1000) + 500,

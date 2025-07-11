@@ -254,7 +254,7 @@ export default function Dashboard() {
             <PieChart>
               <Pie
                 data={metrics.skillDistribution}>
-                {(metrics.skillDistribution || []).map((entry: any, index: number) => (
+                {(metrics.skillDistribution || []).map((entry: { skill: string; percentage: number }, index: number) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
