@@ -31,7 +31,7 @@ class MistralAIService {
         })
       });
       return response.id;
-    } catch (error) {
+    } catch {
       // Fallback to local storage
       return dataStore.createConversation(userId);
     }
@@ -62,7 +62,7 @@ class MistralAIService {
         confidence: 95,
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+    } catch {
       // Fallback to chat completions
       return this.getChatCompletion(enhancedPrompts[type] || enhancedPrompts.general);
     }

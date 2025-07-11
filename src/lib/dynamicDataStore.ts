@@ -1,5 +1,4 @@
 // Advanced Dynamic Data Store with AI Integration and Local Fallbacks
-import { advancedMistralService } from './advancedMistralService';
 
 // Basic Interfaces
 export interface User {
@@ -59,7 +58,7 @@ export interface Activity {
   type: string;
   description: string;
   timestamp: Date;
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
 }
 
 export interface DashboardMetrics {
@@ -163,19 +162,19 @@ export interface StyleEvolution {
 }
 
 class DynamicDataStore {
-  private cache: Map<string, { data: any; timestamp: number }> = new Map();
+  private cache: Map<string, { data: unknown; timestamp: number }> = new Map();
   private readonly CACHE_DURATION = 300000; // 5 minutes
-  private learningSessionData: Map<string, any[]> = new Map();
-  private aiModelState: Map<string, any> = new Map();
+  private learningSessionData: Map<string, unknown[]> = new Map();
+  private aiModelState: Map<string, unknown> = new Map();
   private communityGraph: Map<string, CommunityRecommendation[]> = new Map();
 
   // Simulate real-time learning analytics
   private sessionMetrics = {
     activeUsers: 0,
-    currentSessions: new Map<string, any>(),
-    realTimeEvents: [] as any[],
+    currentSessions: new Map<string, unknown>(),
+    realTimeEvents: [] as unknown[],
     creativeActions: new Map<string, number>(),
-    collaborationEvents: [] as any[]
+    collaborationEvents: [] as unknown[]
   };
 
   private database = {
@@ -260,7 +259,7 @@ class DynamicDataStore {
       const cacheKey = `metrics_${userId}`;
       const cached = this.cache.get(cacheKey);
       if (cached && Date.now() - cached.timestamp < this.CACHE_DURATION) {
-        return cached.data;
+        return cached.data as DashboardMetrics;
       }
 
       // Generate metrics with local fallbacks
@@ -381,7 +380,6 @@ class DynamicDataStore {
   private generateAIInsights(user: User, progress: WeeklyProgress[], skills: SkillDistribution[]): AIInsights {
     const overallLevel = this.calculateOverallSkillLevel(user);
     const learningVelocity = this.calculateLearningVelocity(user.id);
-    const communityEngagement = this.getCommunityEngagement(user.id);
     
     // AI-generated personalized learning path
     const personalizedPath = this.generateLearningPath(user, skills);
@@ -398,7 +396,7 @@ class DynamicDataStore {
       skillGaps: this.identifySkillGaps(skills, user.level),
       nextMilestone: personalizedPath.milestones[0]?.title || 'Complete current course',
       confidence: Math.floor(85 + (overallLevel / 10)),
-      learningTrends: this.analyzeLearningTrends(user.id),
+      learningTrends: this.analyzeLearningTrends(),
       strengths: this.identifyTopStrengths(skills),
       nextSteps: this.generateNextSteps(personalizedPath, communityConnections),
       personalizedPath,
@@ -613,7 +611,7 @@ class DynamicDataStore {
     ];
   }
 
-  async getRealTimeMetrics(): Promise<any> {
+  async getRealTimeMetrics(): Promise<unknown> {
     // Return mock real-time metrics for the dashboard
     return {
       activeUsers: Math.floor(Math.random() * 1000) + 500,
@@ -625,7 +623,7 @@ class DynamicDataStore {
   }
 
   // Activity tracking methods
-  public async addActivity(userId: string, type: string, description: string, metadata?: any): Promise<void> {
+  public async addActivity(userId: string, type: string, description: string, metadata?: unknown): Promise<void> {
     const user = this.database.users.find(u => u.id === userId);
     if (!user) return;
 
@@ -634,7 +632,9 @@ class DynamicDataStore {
       type,
       description,
       timestamp: new Date(),
-      metadata: metadata || {}
+      metadata: (metadata && typeof metadata === 'object' && 'courseId' in metadata)
+        ? { ...metadata, courseId: String((metadata as Record<string, unknown>).courseId) }
+        : { courseId: '' }
     };
 
     user.recentActivity.unshift(newActivity);
@@ -683,14 +683,14 @@ class DynamicDataStore {
   private calculateDynamicRank(user: User): number {
     const baseRank = user.stats.communityRank;
     const skillBonus = this.calculateOverallSkillLevel(user) / 10;
-    const activityBonus = this.getRecentActivityScore(user.id);
+    const activityBonus = this.getRecentActivityScore();
     
     return Math.max(1, Math.floor(baseRank - skillBonus - activityBonus));
   }
 
   private getUnlockedAchievements(userId: string): number {
     // Simulate new achievements based on recent activity
-    const recentActivity = this.getRecentActivityScore(userId);
+    const recentActivity = this.getRecentActivityScore();
     return recentActivity > 5 ? Math.floor(Math.random() * 3) : 0;
   }
 
@@ -732,14 +732,15 @@ class DynamicDataStore {
     const recentSessions = this.learningSessionData.get(userId) || [];
     const now = new Date();
     const recentWeek = recentSessions.filter(session => {
-      const sessionDate = new Date(session.timestamp || now);
+      if (!session || typeof session !== 'object' || !('timestamp' in session)) return false;
+      const sessionDate = new Date((session as { timestamp: string | number | Date }).timestamp || now);
       return (now.getTime() - sessionDate.getTime()) < (7 * 24 * 60 * 60 * 1000);
     });
     
     return recentWeek.length * 10; // Convert to velocity score
   }
 
-  private getCommunityEngagement(userId: string): number {
+  private getCommunityEngagement(): number {
     // Simulate community engagement score
     const now = new Date();
     const hourOfDay = now.getHours();
@@ -752,7 +753,7 @@ class DynamicDataStore {
     return timeBonus + dayBonus + Math.floor(Math.random() * 30);
   }
 
-  private getRecentActivityScore(userId: string): number {
+  private getRecentActivityScore(): number {
     // Calculate recent activity score
     const now = new Date();
     const hourOfDay = now.getHours();
@@ -942,7 +943,7 @@ class DynamicDataStore {
     return gaps.length > 0 ? gaps : ['Continue refining current skills'];
   }
 
-  private analyzeLearningTrends(userId: string): string[] {
+  private analyzeLearningTrends(): string[] {
     return [
       'Increasing focus on digital techniques',
       'Growing interest in color theory',

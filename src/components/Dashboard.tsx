@@ -32,7 +32,7 @@ export default function Dashboard() {
         setAiInsights(dashboardMetrics.aiInsights);
         // Load real-time platform data
         const realTime = await dynamicDataStore.getRealTimeMetrics();
-        setRealTimeData(realTime);
+        setRealTimeData(realTime as RealTimeData);
       } catch (error) {
         console.error('Error loading dashboard data:', error);
       } finally {
@@ -44,7 +44,7 @@ export default function Dashboard() {
     const interval = setInterval(async () => {
       try {
         const realTime = await dynamicDataStore.getRealTimeMetrics();
-        setRealTimeData(realTime);
+        setRealTimeData(realTime as RealTimeData);
       } catch (error) {
         console.error('Failed to update real-time data:', error);
       }
