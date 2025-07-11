@@ -9,7 +9,7 @@ export interface ConversationMessage {
   role: 'user' | 'assistant' | 'system';
   content: string;
   timestamp: Date;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface Conversation {
@@ -80,7 +80,7 @@ class AdvancedMistralService {
     };
   }
 
-  private async makeRequest(endpoint: string, options: RequestInit = {}): Promise<any> {
+  private async makeRequest(endpoint: string, options: RequestInit = {}): Promise<unknown> {
     const url = `${this.config.baseUrl}${endpoint}`;
     const headers = {
       'Authorization': `Bearer ${this.config.apiKey}`,
@@ -106,7 +106,7 @@ class AdvancedMistralService {
   }
 
   // Chat Completions (existing functionality)
-  async getChatCompletion(prompt: string, maxTokens: number = 1000): Promise<{ text: string; usage: any }> {
+  async getChatCompletion(prompt: string, maxTokens: number = 1000): Promise<{ text: string; usage: unknown }> {
     try {
       // Enhance prompt for Domestika Creative Assistant
       const enhancedPrompt = `You are Domestika Creative Assistant, an AI mentor helping millions of creatives learn faster, practice better, and share more confidently.
@@ -138,12 +138,12 @@ Provide a comprehensive, well-formatted response that helps the learner grow the
         })
       });
 
-      const rawText = response.choices[0]?.message?.content || '';
+      const rawText = (response as any).choices[0]?.message?.content || '';
       const formattedText = this.formatCreativeResponse(rawText);
 
       return {
         text: formattedText,
-        usage: response.usage
+        usage: (response as any).usage
       };
     } catch (error) {
       console.error('Chat completion failed:', error);
@@ -243,7 +243,7 @@ Try your question again when the connection improves! 🚀`,
         })
       });
 
-      return response.result || {
+      return (response as any).result || {
         category: 'unknown',
         confidence: 0,
         subcategories: []
@@ -309,7 +309,7 @@ Try your question again when the connection improves! 🚀`,
         })
       });
 
-      return response.result || {
+      return (response as any).result || {
         text: '',
         confidence: 0,
         boundingBoxes: []
@@ -354,7 +354,7 @@ Try your question again when the connection improves! 🚀`,
   async getConversations(): Promise<Conversation[]> {
     try {
       const response = await this.makeRequest('/conversations');
-      return response.conversations || Array.from(this.conversations.values());
+      return (response as any).conversations || Array.from(this.conversations.values());
     } catch (error) {
       console.error('Failed to get conversations:', error);
       return Array.from(this.conversations.values());
@@ -364,7 +364,7 @@ Try your question again when the connection improves! 🚀`,
   async getConversation(conversationId: string): Promise<Conversation | null> {
     try {
       const response = await this.makeRequest(`/conversations/${conversationId}`);
-      return response.conversation || this.conversations.get(conversationId) || null;
+      return (response as any).conversation || this.conversations.get(conversationId) || null;
     } catch (error) {
       console.error('Failed to get conversation:', error);
       return this.conversations.get(conversationId) || null;
@@ -374,7 +374,7 @@ Try your question again when the connection improves! 🚀`,
   async getConversationHistory(conversationId: string): Promise<ConversationMessage[]> {
     try {
       const response = await this.makeRequest(`/conversations/${conversationId}/history`);
-      return response.messages || [];
+      return (response as any).messages || [];
     } catch (error) {
       console.error('Failed to get conversation history:', error);
       return [];
@@ -418,7 +418,7 @@ Try your question again when the connection improves! 🚀`,
       });
 
       // Extract AI response
-      const aiContent = response.choices?.[0]?.message?.content || 'I apologize, but I cannot provide a response at this time.';
+      const aiContent = (response as any).choices?.[0]?.message?.content || 'I apologize, but I cannot provide a response at this time.';
       
       const aiMessage: ConversationMessage = {
         id: (Date.now() + 1).toString(),
@@ -481,7 +481,7 @@ Try your question again when the connection improves! 🚀`,
   }
 
   // Advanced Analytics and Insights
-  async generateDashboardInsights(userActivity: any): Promise<any> {
+  async generateDashboardInsights(userActivity: unknown): Promise<unknown> {
     const prompt = `Analyze user learning activity and generate insights: ${JSON.stringify(userActivity)}. 
     Provide specific recommendations, skill gaps, learning progress analysis, and next steps in JSON format.`;
     
@@ -494,7 +494,7 @@ Try your question again when the connection improves! 🚀`,
     }
   }
 
-  async analyzeImageContent(imageBase64: string): Promise<any> {
+  async analyzeImageContent(imageBase64: string): Promise<unknown> {
     const prompt = `Analyze this creative work image and provide detailed feedback on composition, color theory, technique, and improvement suggestions. Return as structured JSON.`;
     
     const response = await this.getChatCompletion(prompt + ` [Image data: ${imageBase64.substring(0, 100)}...]`, 1000);

@@ -140,9 +140,15 @@ export default function PersonalizedLearning() {
         // Set courses from recommended courses or use fallback
         if (coursesData && coursesData.length > 0) {
           // Map the Course type from dynamicDataStore to our local Course interface
-          const mappedCourses: Course[] = (coursesData as any[]).map((course) => ({
-            ...course,
-            duration: String(course.duration),
+          const mappedCourses: Course[] = (coursesData as Record<string, unknown>[]).map((course) => ({
+            id: String(course.id ?? ''),
+            title: String(course.title ?? ''),
+            instructor: String(course.instructor ?? ''),
+            level: String(course.level ?? ''),
+            duration: String(course.duration ?? ''),
+            rating: Number(course.rating ?? 0),
+            price: String(course.price ?? ''),
+            skills: Array.isArray(course.skills) ? course.skills.map(String) : [],
             aiMatch: Math.floor(Math.random() * 20) + 80,
             enrollments: Math.floor(Math.random() * 1000) + 500,
             completionRate: Math.floor(Math.random() * 30) + 70
@@ -302,7 +308,7 @@ export default function PersonalizedLearning() {
     // Add initial AI message
     const initialMessage: ChatMessage = {
       id: 'initial',
-      text: 'Hello! I\'m your AI learning companion powered by Mistral AI. I can help you discover personalized courses, track your progress, and provide tailored learning recommendations. What would you like to explore today?',
+      text: 'Hello! I&apos;m your AI learning companion powered by Mistral AI. I can help you discover personalized courses, track your progress, and provide tailored learning recommendations. What would you like to explore today?',
       isAI: true,
       timestamp: new Date(),
       confidence: 95
