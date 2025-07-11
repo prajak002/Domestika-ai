@@ -1,0 +1,287 @@
+{
+  "users": [
+    {
+      "id": "user_001",
+      "name": "Alex Creative",
+      "email": "alex@creative.com",
+      "avatar": "/avatars/alex.jpg",
+      "level": "Intermediate",
+      "joinDate": "2024-01-15",
+      "timezone": "UTC-5",
+      "preferences": {
+        "learningStyle": "visual",
+        "notifications": true,
+        "privacy": "public"
+      },
+      "stats": {
+        "totalHours": 127,
+        "coursesCompleted": 8,
+        "coursesInProgress": 2,
+        "communityRank": 42,
+        "achievements": 24,
+        "streakDays": 15
+      }
+    }
+  ],
+  "courses": [
+    {
+      "id": "course_001",
+      "title": "Advanced Digital Painting Techniques",
+      "instructor": "Maria Rodriguez",
+      "category": "Digital Art",
+      "level": "Advanced",
+      "duration": 45,
+      "enrolledStudents": 1234,
+      "rating": 4.8,
+      "price": 89.99,
+      "thumbnail": "/courses/digital-painting.jpg",
+      "description": "Master advanced digital painting techniques with professional workflows",
+      "skills": ["Digital Painting", "Color Theory", "Composition"],
+      "status": "published",
+      "lessons": [
+        {
+          "id": "lesson_001",
+          "title": "Advanced Brush Techniques",
+          "duration": 25,
+          "type": "video",
+          "completed": false
+        },
+        {
+          "id": "lesson_002", 
+          "title": "Color Harmony in Digital Art",
+          "duration": 30,
+          "type": "video",
+          "completed": true
+        }
+      ]
+    },
+    {
+      "id": "course_002",
+      "title": "Typography Fundamentals",
+      "instructor": "David Kim",
+      "category": "Graphic Design",
+      "level": "Beginner",
+      "duration": 30,
+      "enrolledStudents": 2156,
+      "rating": 4.9,
+      "price": 69.99,
+      "thumbnail": "/courses/typography.jpg",
+      "description": "Learn the fundamentals of typography and type design",
+      "skills": ["Typography", "Font Design", "Layout"],
+      "status": "published",
+      "lessons": [
+        {
+          "id": "lesson_003",
+          "title": "Understanding Type Anatomy",
+          "duration": 20,
+          "type": "video",
+          "completed": true
+        }
+      ]
+    }
+  ],
+  "userProgress": [
+    {
+      "userId": "user_001",
+      "courseId": "course_001",
+      "progress": 75,
+      "completedLessons": ["lesson_002"],
+      "timeSpent": 45,
+      "lastAccessed": "2025-07-11T09:30:00Z",
+      "notes": [
+        {
+          "lessonId": "lesson_002",
+          "content": "Great insights on color temperature",
+          "timestamp": "2025-07-10T14:20:00Z"
+        }
+      ]
+    },
+    {
+      "userId": "user_001", 
+      "courseId": "course_002",
+      "progress": 45,
+      "completedLessons": ["lesson_003"],
+      "timeSpent": 25,
+      "lastAccessed": "2025-07-09T16:45:00Z",
+      "notes": []
+    }
+  ],
+  "skillProgress": [
+    {
+      "userId": "user_001",
+      "skill": "Digital Painting",
+      "current": 75,
+      "target": 90,
+      "color": "#8B5CF6",
+      "lastUpdated": "2025-07-11T10:00:00Z",
+      "milestones": [
+        {
+          "level": 50,
+          "achievedAt": "2025-06-15T12:00:00Z",
+          "title": "Intermediate Level"
+        }
+      ]
+    },
+    {
+      "userId": "user_001",
+      "skill": "Typography",
+      "current": 45,
+      "target": 80,
+      "color": "#3B82F6",
+      "lastUpdated": "2025-07-09T16:45:00Z",
+      "milestones": []
+    },
+    {
+      "userId": "user_001",
+      "skill": "Color Theory",
+      "current": 85,
+      "target": 95,
+      "color": "#10B981",
+      "lastUpdated": "2025-07-11T09:30:00Z",
+      "milestones": [
+        {
+          "level": 75,
+          "achievedAt": "2025-07-01T10:30:00Z",
+          "title": "Advanced Understanding"
+        }
+      ]
+    },
+    {
+      "userId": "user_001",
+      "skill": "Composition",
+      "current": 60,
+      "target": 85,
+      "color": "#F59E0B",
+      "lastUpdated": "2025-07-10T14:20:00Z",
+      "milestones": []
+    }
+  ],
+  "achievements": [
+    {
+      "id": "achievement_001",
+      "userId": "user_001",
+      "title": "Digital Art Pioneer",
+      "description": "Completed first digital painting course",
+      "icon": "Palette",
+      "rarity": "bronze",
+      "points": 100,
+      "date": "2025-06-20T10:30:00Z",
+      "category": "learning"
+    },
+    {
+      "id": "achievement_002",
+      "userId": "user_001", 
+      "title": "Community Helper",
+      "description": "Helped 10 fellow students",
+      "icon": "Users",
+      "rarity": "silver",
+      "points": 250,
+      "date": "2025-07-05T15:45:00Z",
+      "category": "community"
+    },
+    {
+      "id": "achievement_003",
+      "userId": "user_001",
+      "title": "Quick Learner",
+      "description": "Completed course in record time",
+      "icon": "Zap",
+      "rarity": "gold",
+      "points": 500,
+      "date": "2025-07-08T12:20:00Z",
+      "category": "performance"
+    }
+  ],
+  "designs": [
+    {
+      "id": "design_001",
+      "userId": "user_001",
+      "title": "Sunset Landscape",
+      "description": "Digital painting of mountain sunset",
+      "imageUrl": "/designs/sunset-landscape.jpg",
+      "category": "Digital Painting",
+      "tags": ["landscape", "sunset", "mountains"],
+      "likes": 45,
+      "views": 234,
+      "createdAt": "2025-07-10T09:15:00Z",
+      "isPublic": true,
+      "feedback": [
+        {
+          "id": "feedback_001",
+          "userId": "user_002",
+          "content": "Beautiful color harmony!",
+          "rating": 5,
+          "timestamp": "2025-07-10T14:30:00Z"
+        }
+      ]
+    }
+  ],
+  "activities": [
+    {
+      "id": "activity_001",
+      "userId": "user_001",
+      "type": "course_completion",
+      "description": "Completed lesson: Color Harmony in Digital Art",
+      "timestamp": "2025-07-11T09:30:00Z",
+      "data": {
+        "courseId": "course_001",
+        "lessonId": "lesson_002",
+        "timeSpent": 30
+      }
+    },
+    {
+      "id": "activity_002",
+      "userId": "user_001",
+      "type": "design_upload",
+      "description": "Uploaded new design: Sunset Landscape",
+      "timestamp": "2025-07-10T09:15:00Z",
+      "data": {
+        "designId": "design_001",
+        "category": "Digital Painting"
+      }
+    },
+    {
+      "id": "activity_003",
+      "userId": "user_001",
+      "type": "skill_milestone",
+      "description": "Reached Advanced level in Color Theory",
+      "timestamp": "2025-07-01T10:30:00Z",
+      "data": {
+        "skill": "Color Theory",
+        "level": 75,
+        "milestone": "Advanced Understanding"
+      }
+    }
+  ],
+  "analytics": {
+    "daily": {
+      "2025-07-11": {
+        "activeUsers": 156,
+        "coursesCompleted": 23,
+        "practiceMinutes": 2340,
+        "communityInteractions": 89
+      },
+      "2025-07-10": {
+        "activeUsers": 143,
+        "coursesCompleted": 18,
+        "practiceMinutes": 2180,
+        "communityInteractions": 76
+      },
+      "2025-07-09": {
+        "activeUsers": 134,
+        "coursesCompleted": 15,
+        "practiceMinutes": 1950,
+        "communityInteractions": 62
+      }
+    },
+    "trends": {
+      "popularSkills": [
+        { "name": "Digital Painting", "growth": 25 },
+        { "name": "Typography", "growth": 18 },
+        { "name": "Color Theory", "growth": 22 }
+      ],
+      "courseCompletionRate": 78,
+      "averageSessionTime": 45,
+      "userRetention": 85
+    }
+  }
+}
