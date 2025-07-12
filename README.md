@@ -469,6 +469,6 @@ MISTRAL_MODEL=mistral-7b-instruct
 
 ---
 
-**Built with ❤️ for Domestika's Creative Community**
+**Built with ❤️ By Prajak**
 
 *This prototype demonstrates the potential of AI-enhanced creative education, combining cutting-edge technology with intuitive design to empower artists and creators worldwide.*
