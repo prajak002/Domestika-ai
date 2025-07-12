@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import TeX from '@matejmazur/react-katex';
 import 'katex/dist/katex.min.css';
 import {
-  BookOpen,
   Target,
   TrendingUp,
   Send,
@@ -15,14 +14,10 @@ import {
   Brain,
   Users,
   Sparkles,
-  Palette,
-  Camera,
   Zap,
   Trophy,
-  Heart,
   Share2,
   MessageCircle,
-  UserCheck,
   Navigation,
   CheckCircle,
   ArrowRight,
@@ -30,7 +25,6 @@ import {
   Twitter,
   Facebook,
   Linkedin,
-  Link,
   Download
 } from 'lucide-react';
 import {
@@ -120,143 +114,139 @@ export default function PersonalizedLearningEnhanced() {
   
   // Sharing State
   const [shareProgress, setShareProgress] = useState<ShareableProgress | null>(null);
-  const [showShareDialog, setShowShareDialog] = useState(false);
   
   // Charts data
   const [skillData, setSkillData] = useState<{ subject: string; A: number; fullMark: number }[]>([]);
   const [progressData, setProgressData] = useState<{ week: string; progress: number; engagement: number }[]>([]);
 
   useEffect(() => {
-    initializeEnhancedLearning();
-  }, []);
+    const initializeEnhancedLearning = async () => {
+      // Initialize skill journey
+      const sampleJourney: SkillJourneyStep[] = [
+        {
+          id: 'step-1',
+          title: 'Master Color Theory Fundamentals',
+          description: 'Learn the essential principles of color harmony, temperature, and emotional impact',
+          status: 'completed',
+          estimatedTime: '2 weeks',
+          difficulty: 'beginner',
+          skills: ['Color Harmony', 'Color Psychology', 'Color Mixing'],
+          aiGuidance: 'Start with the color wheel and practice mixing complementary colors daily',
+          communitySupport: []
+        },
+        {
+          id: 'step-2',
+          title: 'Advanced Composition Techniques',
+          description: 'Explore rule of thirds, leading lines, and dynamic compositions',
+          status: 'current',
+          estimatedTime: '3 weeks',
+          difficulty: 'intermediate',
+          skills: ['Composition', 'Visual Balance', 'Focal Points'],
+          aiGuidance: 'Practice analyzing master paintings and recreate their compositional structures',
+          communitySupport: []
+        },
+        {
+          id: 'step-3',
+          title: 'Digital Art Mastery',
+          description: 'Combine traditional skills with digital tools and techniques',
+          status: 'upcoming',
+          estimatedTime: '4 weeks',
+          difficulty: 'advanced',
+          skills: ['Digital Painting', 'Software Proficiency', 'Digital Composition'],
+          aiGuidance: 'Integrate AI tools to enhance your creative workflow',
+          communitySupport: []
+        }
+      ];
+      setCurrentJourney(sampleJourney);
+      setJourneyProgress(40); // 40% through current journey
 
-  const initializeEnhancedLearning = async () => {
-    // Initialize skill journey
-    const sampleJourney: SkillJourneyStep[] = [
-      {
-        id: 'step-1',
-        title: 'Master Color Theory Fundamentals',
-        description: 'Learn the essential principles of color harmony, temperature, and emotional impact',
-        status: 'completed',
-        estimatedTime: '2 weeks',
-        difficulty: 'beginner',
-        skills: ['Color Harmony', 'Color Psychology', 'Color Mixing'],
-        aiGuidance: 'Start with the color wheel and practice mixing complementary colors daily',
-        communitySupport: []
-      },
-      {
-        id: 'step-2',
-        title: 'Advanced Composition Techniques',
-        description: 'Explore rule of thirds, leading lines, and dynamic compositions',
-        status: 'current',
-        estimatedTime: '3 weeks',
-        difficulty: 'intermediate',
-        skills: ['Composition', 'Visual Balance', 'Focal Points'],
-        aiGuidance: 'Practice analyzing master paintings and recreate their compositional structures',
-        communitySupport: []
-      },
-      {
-        id: 'step-3',
-        title: 'Digital Art Mastery',
-        description: 'Combine traditional skills with digital tools and techniques',
-        status: 'upcoming',
-        estimatedTime: '4 weeks',
-        difficulty: 'advanced',
-        skills: ['Digital Painting', 'Software Proficiency', 'Digital Composition'],
-        aiGuidance: 'Integrate AI tools to enhance your creative workflow',
-        communitySupport: []
-      }
-    ];
-    setCurrentJourney(sampleJourney);
-    setJourneyProgress(40); // 40% through current journey
+      // Initialize community recommendations
+      const peers: CommunityMember[] = [
+        {
+          id: 'peer-1',
+          name: 'Sofia Chen',
+          avatar: '👩‍🎨',
+          role: 'peer',
+          expertise: ['Digital Art', 'Character Design'],
+          rating: 4.8,
+          isOnline: true,
+          lastActive: '2 minutes ago',
+          helpfulnessScore: 95
+        },
+        {
+          id: 'peer-2',
+          name: 'Marcus Thompson',
+          avatar: '👨‍🎨',
+          role: 'peer',
+          expertise: ['Color Theory', 'Traditional Painting'],
+          rating: 4.6,
+          isOnline: false,
+          lastActive: '1 hour ago',
+          helpfulnessScore: 87
+        }
+      ];
+      setRecommendedPeers(peers);
 
-    // Initialize community recommendations
-    const peers: CommunityMember[] = [
-      {
-        id: 'peer-1',
-        name: 'Sofia Chen',
-        avatar: '👩‍🎨',
-        role: 'peer',
-        expertise: ['Digital Art', 'Character Design'],
-        rating: 4.8,
-        isOnline: true,
-        lastActive: '2 minutes ago',
-        helpfulnessScore: 95
-      },
-      {
-        id: 'peer-2',
-        name: 'Marcus Thompson',
-        avatar: '👨‍🎨',
-        role: 'peer',
-        expertise: ['Color Theory', 'Traditional Painting'],
-        rating: 4.6,
-        isOnline: false,
-        lastActive: '1 hour ago',
-        helpfulnessScore: 87
-      }
-    ];
-    setRecommendedPeers(peers);
+      const mentors: CommunityMember[] = [
+        {
+          id: 'mentor-1',
+          name: 'Elena Rodriguez',
+          avatar: '🎨',
+          role: 'mentor',
+          expertise: ['Professional Portfolio', 'Art Direction', 'Career Guidance'],
+          rating: 4.9,
+          isOnline: true,
+          lastActive: 'now',
+          helpfulnessScore: 98
+        },
+        {
+          id: 'instructor-1',
+          name: 'David Kim',
+          avatar: '🏆',
+          role: 'instructor',
+          expertise: ['Advanced Techniques', 'Art History', 'Critique'],
+          rating: 5.0,
+          isOnline: false,
+          lastActive: '30 minutes ago',
+          helpfulnessScore: 100
+        }
+      ];
+      setAvailableMentors(mentors);
 
-    const mentors: CommunityMember[] = [
-      {
-        id: 'mentor-1',
-        name: 'Elena Rodriguez',
-        avatar: '🎨',
-        role: 'mentor',
-        expertise: ['Professional Portfolio', 'Art Direction', 'Career Guidance'],
-        rating: 4.9,
-        isOnline: true,
-        lastActive: 'now',
-        helpfulnessScore: 98
-      },
-      {
-        id: 'instructor-1',
-        name: 'David Kim',
-        avatar: '🏆',
-        role: 'instructor',
-        expertise: ['Advanced Techniques', 'Art History', 'Critique'],
-        rating: 5.0,
-        isOnline: false,
-        lastActive: '30 minutes ago',
-        helpfulnessScore: 100
-      }
-    ];
-    setAvailableMentors(mentors);
+      // Initialize share progress data
+      const initialSkillData = [
+        { subject: 'Color Theory', A: 85, fullMark: 100 },
+        { subject: 'Composition', A: 72, fullMark: 100 },
+        { subject: 'Digital Art', A: 58, fullMark: 100 },
+        { subject: 'Traditional Art', A: 88, fullMark: 100 },
+        { subject: 'Typography', A: 45, fullMark: 100 },
+        { subject: 'Illustration', A: 67, fullMark: 100 }
+      ];
+      
+      setSkillData(initialSkillData);
+      
+      // Initialize progress data
+      setProgressData([
+        { week: 'W1', progress: 20, engagement: 15 },
+        { week: 'W2', progress: 35, engagement: 28 },
+        { week: 'W3', progress: 45, engagement: 42 },
+        { week: 'W4', progress: 62, engagement: 58 },
+        { week: 'W5', progress: 78, engagement: 72 },
+        { week: 'W6', progress: 85, engagement: 80 }
+      ]);
+      
+      setShareProgress({
+        skillProgress: initialSkillData.map(skill => ({ subject: skill.subject, level: skill.A })),
+        achievements: ['Color Theory Master', 'Consistent Learner', '30-Day Streak'],
+        currentJourney: 'Advanced Composition Techniques',
+        completedProjects: 12,
+        studyStreak: 18
+      });
 
-    // Initialize share progress data
-    const initialSkillData = [
-      { subject: 'Color Theory', A: 85, fullMark: 100 },
-      { subject: 'Composition', A: 72, fullMark: 100 },
-      { subject: 'Digital Art', A: 58, fullMark: 100 },
-      { subject: 'Traditional Art', A: 88, fullMark: 100 },
-      { subject: 'Typography', A: 45, fullMark: 100 },
-      { subject: 'Illustration', A: 67, fullMark: 100 }
-    ];
-    
-    setSkillData(initialSkillData);
-    
-    // Initialize progress data
-    setProgressData([
-      { week: 'W1', progress: 20, engagement: 15 },
-      { week: 'W2', progress: 35, engagement: 28 },
-      { week: 'W3', progress: 45, engagement: 42 },
-      { week: 'W4', progress: 62, engagement: 58 },
-      { week: 'W5', progress: 78, engagement: 72 },
-      { week: 'W6', progress: 85, engagement: 80 }
-    ]);
-    
-    setShareProgress({
-      skillProgress: initialSkillData.map(skill => ({ subject: skill.subject, level: skill.A })),
-      achievements: ['Color Theory Master', 'Consistent Learner', '30-Day Streak'],
-      currentJourney: 'Advanced Composition Techniques',
-      completedProjects: 12,
-      studyStreak: 18
-    });
-
-    // Add enhanced initial AI message
-    const initialMessage: ChatMessage = {
-      id: 'initial',
-      text: `🎨 **Welcome to Your Personalized Creative Journey!** 🚀
+      // Add enhanced initial AI message
+      const initialMessage: ChatMessage = {
+        id: 'initial',
+        text: `🎨 **Welcome to Your Personalized Creative Journey!** 🚀
 
 I'm your AI companion designed to guide you through personalized skill development. Here's how I'll help you excel:
 
@@ -285,13 +275,16 @@ I'm your AI companion designed to guide you through personalized skill developme
 - "Connect me with peers working on similar projects"  
 - "Give me feedback on my latest artwork"
 - "Help me share my progress"`,
-      isAI: true,
-      timestamp: new Date(),
-      confidence: 95,
-      type: 'journey'
+        isAI: true,
+        timestamp: new Date(),
+        confidence: 95,
+        type: 'journey'
+      };
+      setMessages([initialMessage]);
     };
-    setMessages([initialMessage]);
-  };
+    
+    initializeEnhancedLearning();
+  }, []);
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -344,16 +337,16 @@ I'm your AI companion designed to guide you through personalized skill developme
         timestamp: new Date(),
         confidence: data.confidence || 85,
         type: messageType,
-        attachments: messageType === 'journey' ? generateJourneySteps(currentInput) : undefined
+        attachments: messageType === 'journey' ? generateJourneySteps() : undefined
       };
 
       setMessages(prev => [...prev, aiMessage]);
 
       // Update relevant state based on message type
       if (messageType === 'community') {
-        updateCommunityRecommendations(currentInput);
+        updateCommunityRecommendations();
       } else if (messageType === 'feedback') {
-        generateAIFeedback(currentInput);
+        generateAIFeedback();
       }
 
     } catch (error) {
@@ -376,7 +369,7 @@ I'm your AI companion designed to guide you through personalized skill developme
       
       // Still update state for meaningful interactions
       if (messageType === 'feedback') {
-        generateAIFeedback(currentInput);
+        generateAIFeedback();
       }
     } finally {
       setIsLoading(false);
@@ -413,7 +406,7 @@ I'm your AI companion designed to guide you through personalized skill developme
     return `${baseContext}\n${typeSpecificContext[type as keyof typeof typeSpecificContext]}\n\nUser Input: ${input}\n\nResponse (be encouraging, specific, and actionable):`;
   };
 
-  const generateJourneySteps = (input: string): SkillJourneyStep[] => {
+  const generateJourneySteps = (): SkillJourneyStep[] => {
     // This would typically come from AI analysis
     return [
       {
@@ -430,12 +423,12 @@ I'm your AI companion designed to guide you through personalized skill developme
     ];
   };
 
-  const updateCommunityRecommendations = (input: string) => {
+  const updateCommunityRecommendations = () => {
     // In a real app, this would use AI to find relevant community members
-    console.log('Updating community recommendations based on:', input);
+    console.log('Updating community recommendations');
   };
 
-  const generateAIFeedback = (input: string) => {
+  const generateAIFeedback = () => {
     const newFeedback: AIFeedback = {
       id: `feedback-${Date.now()}`,
       content: 'AI analysis of your work',
@@ -496,8 +489,6 @@ ${shareProgress.skillProgress.slice(0, 3).map(s => `• ${s.subject}: ${s.level}
   };
 
   const generateFallbackResponse = (input: string, type: 'feedback' | 'journey' | 'community' | 'general'): string => {
-    const lowerInput = input.toLowerCase();
-    
     switch (type) {
       case 'feedback':
         return `🎨 **Creative Feedback for Your Work**
@@ -616,7 +607,7 @@ Keep practicing and growing! I'll be back with full AI guidance shortly. 🚀`;
         ].map(tab => (
           <button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id as any)}
+            onClick={() => setActiveTab(tab.id as 'journey' | 'community' | 'feedback' | 'share')}
             className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-all ${
               activeTab === tab.id
                 ? 'bg-white dark:bg-gray-700 text-purple-600 dark:text-purple-400 shadow-sm'
@@ -1024,7 +1015,7 @@ Keep practicing and growing! I'll be back with full AI guidance shortly. 🚀`;
             </h3>
             
             <div className="space-y-4 max-h-96 overflow-y-auto mb-4">
-              {messages.map((msg, idx) => (
+              {messages.map((msg) => (
                 <div key={msg.id} className={`flex items-start space-x-3 ${msg.isAI ? 'flex-row-reverse space-x-reverse' : ''}`}>
                   <div className={`rounded-full p-2 ${msg.isAI ? 'bg-purple-100 dark:bg-purple-900' : 'bg-gray-200 dark:bg-gray-700'}`}>
                     {msg.isAI ? <Brain className="h-5 w-5 text-purple-600" /> : <Users className="h-5 w-5 text-gray-600" />}
