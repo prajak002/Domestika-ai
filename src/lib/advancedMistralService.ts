@@ -81,12 +81,20 @@ class AdvancedMistralService {
 
   constructor() {
     this.config = {
-      apiKey: process.env.MISTRAL_API_KEY || process.env.NEXT_PUBLIC_MISTRAL_API_KEY || '',
+      apiKey: process.env.MISTRAL_API_KEY || '',
       baseUrl: 'https://api.mistral.ai/v1'
     };
+    
+    if (!this.config.apiKey) {
+      console.warn('MISTRAL_API_KEY not found in environment variables');
+    }
   }
 
   private async makeRequest(endpoint: string, options: RequestInit = {}): Promise<unknown> {
+    if (!this.config.apiKey) {
+      throw new Error('Mistral API key is not configured. Please set MISTRAL_API_KEY in your environment variables.');
+    }
+
     const url = `${this.config.baseUrl}${endpoint}`;
     const headers = {
       'Authorization': `Bearer ${this.config.apiKey}`,

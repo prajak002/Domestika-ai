@@ -1,23 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const MISTRAL_API_KEY = process.env.MISTRAL_API_KEY || 'd4aXEtqo3GIDOfq1wmNnAUgGmzIZQGpk';
+const MISTRAL_API_KEY = 'OYSWZkr2GOl2IDJrctvrTb8FgEx1nFcC';
 const MISTRAL_API_BASE = 'https://api.mistral.ai/v1';
 
 export async function POST(request: NextRequest) {
   try {
     console.log('Mistral API route called'); // Debug log
-    console.log('API Key available:', !!MISTRAL_API_KEY); // Debug log
-    console.log('API Key starts with:', MISTRAL_API_KEY?.substring(0, 10)); // Debug log
     
     // Check if API key is available
     if (!MISTRAL_API_KEY) {
-      console.error('API key not available');
+      console.error('MISTRAL_API_KEY is not set');
       return NextResponse.json({ 
         error: 'API key not configured',
         success: false,
-        message: 'The AI service is currently unavailable. Please contact support.'
+        message: 'The MISTRAL_API_KEY is not configured properly.'
       }, { status: 500 });
     }
+
+    console.log('API Key configured successfully'); // Debug log
 
     const requestBody = await request.json();
     console.log('Request body:', requestBody); // Debug log

@@ -223,18 +223,16 @@ export default function PersonalizedLearningEnhanced() {
     ];
     setAvailableMentors(mentors);
 
-    // Initialize share progress data
-    const initialSkillData = [
+    // Initialize skill data
+    setSkillData([
       { subject: 'Color Theory', A: 85, fullMark: 100 },
       { subject: 'Composition', A: 72, fullMark: 100 },
       { subject: 'Digital Art', A: 58, fullMark: 100 },
       { subject: 'Traditional Art', A: 88, fullMark: 100 },
       { subject: 'Typography', A: 45, fullMark: 100 },
       { subject: 'Illustration', A: 67, fullMark: 100 }
-    ];
-    
-    setSkillData(initialSkillData);
-    
+    ]);
+
     // Initialize progress data
     setProgressData([
       { week: 'W1', progress: 20, engagement: 15 },
@@ -244,9 +242,10 @@ export default function PersonalizedLearningEnhanced() {
       { week: 'W5', progress: 78, engagement: 72 },
       { week: 'W6', progress: 85, engagement: 80 }
     ]);
-    
+
+    // Initialize share progress data
     setShareProgress({
-      skillProgress: initialSkillData.map(skill => ({ subject: skill.subject, level: skill.A })),
+      skillProgress: skillData.map(skill => ({ subject: skill.subject, level: skill.A })),
       achievements: ['Color Theory Master', 'Consistent Learner', '30-Day Streak'],
       currentJourney: 'Advanced Composition Techniques',
       completedProjects: 12,
@@ -321,21 +320,16 @@ I'm your AI companion designed to guide you through personalized skill developme
         },
         body: JSON.stringify({ 
           prompt: enhancedPrompt, 
-          type: messageType === 'feedback' ? 'design_feedback' : 'learning_recommendation',
+          type: 'personalized_learning',
           maxTokens: 1000
         }),
       });
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
-        throw new Error(errorData.error || `API returned ${response.status}`);
+        throw new Error('Failed to get AI response');
       }
 
       const data = await response.json();
-      
-      if (!data.text && !data.response) {
-        throw new Error('No response content received from API');
-      }
       
       const aiMessage: ChatMessage = {
         id: `ai-${Date.now()}`,
@@ -359,25 +353,24 @@ I'm your AI companion designed to guide you through personalized skill developme
     } catch (error) {
       console.error('Error getting AI response:', error);
       
-      // Generate a meaningful fallback response based on the input
-      const messageType = determineMessageType(currentInput);
-      const fallbackResponse = generateFallbackResponse(currentInput, messageType);
-      
       const fallbackMessage: ChatMessage = {
         id: `fallback-${Date.now()}`,
-        text: fallbackResponse,
+        text: `I apologize, but I'm having trouble connecting right now. Here's what I can help you with offline:
+
+**🎯 Your Current Journey Step:** ${currentJourney.find(step => step.status === 'current')?.title || 'Continue practicing fundamentals'}
+
+**👥 Recommended Action:** Connect with ${recommendedPeers[0]?.name || 'your study group'} - they're online and working on similar skills!
+
+**💡 Quick Tip:** Practice color mixing for 15 minutes daily to strengthen your foundation.
+
+Please try your question again in a moment!`,
         isAI: true,
         timestamp: new Date(),
         confidence: 70,
-        type: messageType
+        type: 'general'
       };
 
       setMessages(prev => [...prev, fallbackMessage]);
-      
-      // Still update state for meaningful interactions
-      if (messageType === 'feedback') {
-        generateAIFeedback(currentInput);
-      }
     } finally {
       setIsLoading(false);
     }
@@ -398,8 +391,8 @@ I'm your AI companion designed to guide you through personalized skill developme
 
   const createEnhancedPrompt = (input: string, type: string): string => {
     const baseContext = `You are the Domestika AI Learning Assistant, specialized in personalized creative education. Current user context:
-- Journey Progress: ${journeyProgress}% through "${currentJourney.find(s => s.status === 'current')?.title || 'Advanced Composition Techniques'}"
-- Top Skills: ${skillData && skillData.length > 0 ? skillData.slice(0, 3).map(s => `${s.subject} (${s.A || 0}%)`).join(', ') : 'Color Theory, Composition, Traditional Art'}
+- Journey Progress: ${journeyProgress}% through "${currentJourney.find(s => s.status === 'current')?.title || 'Color Theory'}"
+- Top Skills: ${skillData.slice(0, 3).map(s => `${s.subject} (${s.A}%)`).join(', ')}
 - Learning Style: Visual, hands-on practice preferred
 `;
 
@@ -493,101 +486,6 @@ ${shareProgress.skillProgress.slice(0, 3).map(s => `• ${s.subject}: ${s.level}
       return <TeX>{msg}</TeX>;
     }
     return <span className="whitespace-pre-wrap">{msg}</span>;
-  };
-
-  const generateFallbackResponse = (input: string, type: 'feedback' | 'journey' | 'community' | 'general'): string => {
-    const lowerInput = input.toLowerCase();
-    
-    switch (type) {
-      case 'feedback':
-        return `🎨 **Creative Feedback for Your Work**
-
-Based on your request about "${input}", here's some guidance:
-
-**🔍 General Areas to Focus On:**
-- **Color Harmony:** Ensure your color choices work well together and support your message
-- **Composition:** Check if your focal point is clear and the visual flow guides the viewer
-- **Technique:** Practice fundamental skills regularly to build confidence
-
-**💡 Actionable Next Steps:**
-1. Study 3 artworks in a similar style to yours for inspiration
-2. Practice the specific technique you mentioned for 15-20 minutes daily
-3. Share your work with the community for peer feedback
-
-**👥 Community Tip:** ${recommendedPeers[0]?.name || 'Sofia Chen'} has expertise in similar areas - consider connecting!
-
-*Note: For detailed AI analysis, I'll need a moment to reconnect. Please try again shortly.*`;
-
-      case 'journey':
-        const currentStep = currentJourney.find(s => s.status === 'current');
-        return `🎯 **Your Personalized Learning Path**
-
-Great question about "${input}"! Here's your guided next steps:
-
-**📍 Current Focus:** ${currentStep?.title || 'Advanced Composition Techniques'}
-**Progress:** ${journeyProgress}% complete
-
-**🎨 Recommended Practice Session:**
-- **Duration:** 30-45 minutes
-- **Focus Area:** Based on your question, work on technique refinement
-- **Goal:** Apply what you're learning to a small practice piece
-
-**📚 Learning Sequence:**
-1. Review the fundamentals related to your question
-2. Practice with guided exercises
-3. Apply to a personal project
-4. Get community feedback
-
-**🔥 Study Tip:** ${currentStep?.aiGuidance || 'Focus on consistent daily practice, even if just 15 minutes'}
-
-Ready to continue your journey? Try the current exercise!`;
-
-      case 'community':
-        return `👥 **Community Connections for You**
-
-Looking to connect around "${input}"? Here are some suggestions:
-
-**🎯 Recommended Study Partners:**
-${recommendedPeers.slice(0, 2).map(peer => 
-  `- **${peer.name}** (${peer.expertise.join(', ')}) - ${peer.isOnline ? 'Online now' : peer.lastActive}`
-).join('\n')}
-
-**🏆 Expert Mentors Available:**
-${availableMentors.slice(0, 1).map(mentor => 
-  `- **${mentor.name}** - ${mentor.expertise.slice(0, 2).join(', ')} specialist`
-).join('\n')}
-
-**💡 Connection Tips:**
-- Share your current project or challenge when reaching out
-- Be specific about what kind of help you're looking for
-- Offer to help others in return - it builds great relationships!
-
-**🎨 Study Group Suggestion:** Start a practice session focused on your question - others might join!
-
-The community is here to help you grow! 🚀`;
-
-      default:
-        return `🎨 **Creative Learning Assistant**
-
-Thanks for your question about "${input}"! While I reconnect for full AI capabilities, here's what I can help with:
-
-**🎯 Your Current Journey:**
-- **Step:** ${currentJourney.find(s => s.status === 'current')?.title || 'Advanced Composition Techniques'}
-- **Progress:** ${journeyProgress}% complete
-- **Next Skills:** ${currentJourney.find(s => s.status === 'upcoming')?.skills.slice(0, 2).join(', ') || 'Digital techniques, Advanced composition'}
-
-**💡 Quick Actions You Can Take:**
-1. Continue with your current learning step
-2. Practice for 15-20 minutes on fundamentals
-3. Connect with study partners who are online
-4. Review your recent work for improvement opportunities
-
-**📈 Recent Progress:**
-- **Strongest Skills:** ${skillData && skillData.length > 0 ? skillData.slice(0, 2).map(s => `${s.subject} (${s.A || 0}%)`).join(', ') : 'Color Theory, Composition'}
-- **Growth Areas:** ${skillData && skillData.length > 0 ? skillData.slice(-2).map(s => `${s.subject} (${s.A || 0}%)`).join(', ') : 'Typography, Digital Art'}
-
-Keep practicing and growing! I'll be back with full AI guidance shortly. 🚀`;
-    }
   };
 
   return (
@@ -932,12 +830,7 @@ Keep practicing and growing! I'll be back with full AI guidance shortly. 🚀`;
                           <div className="text-sm text-gray-600 dark:text-gray-400">Achievements</div>
                         </div>
                         <div className="text-center">
-                          <div className="text-2xl font-bold text-yellow-600">
-                            {shareProgress.skillProgress && shareProgress.skillProgress.length > 0 
-                              ? Math.round(shareProgress.skillProgress.reduce((sum, skill) => sum + (skill.level || 0), 0) / shareProgress.skillProgress.length)
-                              : 0
-                            }
-                          </div>
+                          <div className="text-2xl font-bold text-yellow-600">{Math.round(shareProgress.skillProgress.reduce((sum, skill) => sum + skill.level, 0) / shareProgress.skillProgress.length)}</div>
                           <div className="text-sm text-gray-600 dark:text-gray-400">Avg. Skill Level</div>
                         </div>
                       </div>
